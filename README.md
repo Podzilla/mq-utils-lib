@@ -11,16 +11,12 @@ Since this library is hosted on GitHub Packages, you also need to tell Maven whe
 
     ```xml
     <repositories>
-        <repository>
-            <id>github-podzilla</id> <name>GitHub Podzilla Maven Packages</name>
-            <url>[https://maven.pkg.github.com/Podzilla](https://maven.pkg.github.com/Podzilla)</url>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-            <snapshots>
-                <enabled>true</enabled> </snapshots>
-        </repository>
-        </repositories>
+    <repository>
+        <id>jitpack.io</id>
+        <url>https://jitpack.io</url>
+    </repository>
+    </repositories>
+
     ```
     * **Note:** If the `mq-utils-lib` repository is **public**, this is all you need for the repository configuration.
     * **If the `mq-utils-lib` repository is private**, ensure your Maven `settings.xml` (usually `~/.m2/settings.xml`) has a `<server>` entry with the `<id>` `github-podzilla` and your GitHub credentials (username and PAT).
@@ -34,8 +30,11 @@ Since this library is hosted on GitHub Packages, you also need to tell Maven whe
     <dependencies>
         ...
 
-        <dependency>
-            <groupId>com.podzilla</groupId> <artifactId>mq-utils-lib</artifactId> <version>1.0.3</version> </dependency>
+       <dependency>
+			<groupId>com.github.Podzilla</groupId>
+			<artifactId>mq-utils-lib</artifactId>
+			<version>main-SNAPSHOT</version>
+		</dependency>
 
         ...
     </dependencies>
