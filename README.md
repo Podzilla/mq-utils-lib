@@ -4,7 +4,6 @@
 
 To use the shared `mq-utils-lib` in your microservice project, you need to add it as a dependency in your project's `pom.xml`.
 
-
 Since this library is hosted on GitHub Packages, you also need to tell Maven where to find it by adding the GitHub Packages repository URL to your `pom.xml`.
 
 1.  **Add the Repository:**
