@@ -36,7 +36,7 @@ Since this library is hosted on GitHub Packages, you also need to tell Maven whe
         ...
 
         <dependency>
-            <groupId>com.podzilla</groupId> <artifactId>mq-utils-lib</artifactId> <version>1.0.0</version> </dependency>
+            <groupId>com.podzilla</groupId> <artifactId>mq-utils-lib</artifactId> <version>1.0.3</version> </dependency>
 
         ...
     </dependencies>
