@@ -51,7 +51,7 @@ Follow these steps to publish a new release:
     git push origin main
     git push origin --tags
     ```
-    **❗ Pushing the tag to `main` triggers the automated GitHub Actions release.**
+    **❗❗❗❗ Pushing the tag to `main` triggers the automated GitHub Actions release.**
 
 9.  **Verify Automated Release:** Check GitHub "Actions" tab for triggered workflow run. Ensure success. Check "Packages" for published version.
 
