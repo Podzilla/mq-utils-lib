@@ -9,9 +9,15 @@
     <version>1.0.0</version>
     <packaging>jar</packaging>
 
-    <name>Events Constants Library</name>
+    <name>MQ Library</name>
 
+     <distributionManagement>
+        <repository>
+            <id>podzilla-github</id>
+            <name>GitHub Packages</name>
+            <url>https://maven.pkg.github.com/Podzilla/mq-utils-lib</url> </repository>
+    </distributionManagement>
+    
     <dependencies>
-        <!-- Add dependencies if needed -->
     </dependencies>
 </project>
