@@ -54,23 +54,3 @@ Follow these steps to publish a new release:
     **❗❗❗❗ Pushing the tag to `main` triggers the automated GitHub Actions release.**
 
 9.  **Verify Automated Release:** Check GitHub "Actions" tab for triggered workflow run. Ensure success. Check "Packages" for published version.
-
-10. **Prepare `dev`:**
-    * Switch to `dev`:
-      ```bash
-      git checkout dev
-      ```
-    * Merge `main` into `dev`:
-      ```bash
-      git merge main
-      ```
-    * Edit `pom.xml` on `dev`: update `<version>` to the **next** SNAPSHOT version (e.g., X.Y.Z+1-SNAPSHOT).
-    * Commit version change on `dev`:
-      ```bash
-      git add pom.xml
-      git commit -m "Prepare for next development iteration (X.Y.Z-SNAPSHOT)"
-      ```
-    * Push `dev`:
-      ```bash
-      git push origin dev
-      ```
