@@ -6,18 +6,17 @@
 
     <groupId>com.podzilla</groupId>
     <artifactId>mq-utils-lib</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.2</version>
     <packaging>jar</packaging>
-
-    <name>MQ Library</name>
-
+    <name>MQ Utils Library</name>
+    <description>MQ Utils Library for Podzilla</description>
      <distributionManagement>
         <repository>
             <id>podzilla-github</id>
             <name>GitHub Packages</name>
             <url>https://maven.pkg.github.com/Podzilla/mq-utils-lib</url> </repository>
     </distributionManagement>
-    
+
     <dependencies>
     </dependencies>
 </project>
