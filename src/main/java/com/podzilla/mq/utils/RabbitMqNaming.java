@@ -17,3 +17,6 @@ public class RabbitMqNaming {
         return String.format(QUEUE_NAME_FORMAT, event.exchange, event.name , serviceName);
     }
 }
+
+
+// test
