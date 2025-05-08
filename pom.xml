@@ -6,7 +6,7 @@
 
     <groupId>com.podzilla</groupId>
     <artifactId>mq-utils-lib</artifactId>
-    <version>1.0.2</version>
+    <version>1.0.1</version>
     <packaging>jar</packaging>
     <name>MQ Utils Library</name>
     <description>MQ Utils Library for Podzilla</description>
