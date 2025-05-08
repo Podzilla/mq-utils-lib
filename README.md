@@ -23,7 +23,7 @@ Since this library is hosted on GitHub Packages, you also need to tell Maven whe
 
 2.  **Add the Dependency:**
     Add the following `<dependency>` block within the `<dependencies>` section of your microservice's `pom.xml`:
-    [Package com.podzilla.mq-utils-lib · (click to see the latest version)](https://github.com/Podzilla/mq-utils-lib/packages/2498199)
+   
 
     example :
     ```xml
