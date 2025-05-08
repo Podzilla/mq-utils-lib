@@ -1,0 +1,3 @@
+com\podzilla\mq\EventsConstants.class
+com\podzilla\mq\utils\RabbitMqNaming.class
+com\podzilla\mq\EventMetadata.class
