@@ -1,6 +1,0 @@
-com/podzilla/mq/utils/RabbitMqNaming.class
-com/podzilla/mq/EventConsumer.class
-com/podzilla/mq/EventProducer.class
-com/podzilla/mq/RabbitMQConfig.class
-com/podzilla/mq/EventMetadata.class
-com/podzilla/mq/EventsConstants.class
