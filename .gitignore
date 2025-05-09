@@ -33,3 +33,7 @@ build/
 .vscode/
 
 /*.class
+.class
+
+# Ignore Maven target directory
+/target/
