@@ -12,9 +12,13 @@ Since this library is hosted on GitHub Packages, you also need to tell Maven whe
     ```xml
     <repositories>
     <repository>
-        <id>jitpack.io</id>
-        <url>https://jitpack.io</url>
-    </repository>
+    <id>jitpack.io</id>
+    <url>https://jitpack.io</url>
+	<snapshots>
+        <enabled>true</enabled>
+        <updatePolicy>always</updatePolicy>
+    </snapshots>
+	</repository>
     </repositories>
 
     ```
