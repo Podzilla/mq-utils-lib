@@ -18,6 +18,7 @@
             <url>https://maven.pkg.github.com/Podzilla/mq-utils-lib</url> </repository>
     </distributionManagement>
 
+
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
