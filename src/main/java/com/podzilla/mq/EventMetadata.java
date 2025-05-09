@@ -2,12 +2,12 @@ package com.podzilla.mq;
 
 public class EventMetadata {
     public final String name;
-    public final String key;
+    public final String routingKey;
     public final String exchange;
 
     public EventMetadata(String name, String key, String exchange) {
         this.name = name;
-        this.key = key;
+        this.routingKey = key;
         this.exchange = exchange;
     }
 
@@ -15,12 +15,11 @@ public class EventMetadata {
         return name;
     }
 
-    public String getKey() {
-        return key;
+    public String getRoutingKey() {
+        return routingKey;
     }
 
     public String getExchange() {
         return exchange;
     }
-
 }

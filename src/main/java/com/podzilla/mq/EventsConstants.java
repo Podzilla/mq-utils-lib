@@ -15,11 +15,11 @@ public final class EventsConstants {
     public static final EventMetadata COURIER_REGISTERED = new EventMetadata(
             "CourierRegistered",
             "courier.registered",
-            "courier_exchange");
+            "user_exchange");
     public static final EventMetadata CUSTOMER_REGISTERED = new EventMetadata(
             "CustomerRegistered",
             "customer.registered",
-            "customer_exchange");
+            "user_exchange");
 
     public static final EventMetadata PRODUCT_CREATED = new EventMetadata(
             "ProductCreated",
@@ -33,7 +33,7 @@ public final class EventsConstants {
 
     public static final EventMetadata CART_CHECKEDOUT = new EventMetadata(
             "CartCheckedOut",
-            "cart.checkout",
+            "cart.checkedout",
             "order_exchange");
 
     public static final EventMetadata ORDER_PLACED = new EventMetadata(

@@ -3,7 +3,6 @@ package com.podzilla.mq;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Component;
 
-
 @Component
 public class EventProducer {
     private final RabbitTemplate rabbitTemplate;
@@ -14,6 +13,6 @@ public class EventProducer {
 
     public void publishEvent(EventMetadata eventMetadata) {
         rabbitTemplate.convertAndSend(eventMetadata.getExchange(),
-                eventMetadata.getKey(), "Hello World");
+                eventMetadata.getRoutingKey(), "Hello World");
     }
 }
