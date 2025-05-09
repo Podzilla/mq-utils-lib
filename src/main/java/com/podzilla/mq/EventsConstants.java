@@ -5,6 +5,8 @@ public final class EventsConstants {
     private EventsConstants() {
     }
 
+    public static final String ABC = "abc";
+
     public static final String ANALYTICS_USER_EVENT_QUEUE = "analytics_user_event_queue";
     public static final String ANALYTICS_ORDER_EVENT_QUEUE = "analytics_order_event_queue";
     public static final String ANALYTICS_INVENTORY_EVENT_QUEUE = "analytics_inventory_event_queue";
