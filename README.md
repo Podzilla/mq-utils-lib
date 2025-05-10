@@ -4,103 +4,111 @@
 
 To use the shared `mq-utils-lib` in your microservice project, you need to add it as a dependency in your project's `pom.xml`.
 
-Since this library is hosted on GitHub Packages, you also need to tell Maven where to find it by adding the GitHub Packages repository URL to your `pom.xml`.
+Since this library is hosted on JitPack, you also need to tell Maven where to find it by adding the JitPack repository URL to your `pom.xml`.
 
-1.  **Add the Repository:**
-    Add the following `<repositories>` section to your microservice's `pom.xml` (if you don't have one, add it under the main `<project>` element; if you do, add this `<repository>` entry inside the existing `<repositories>` section):
+---
 
-    ```xml
-    <repositories>
-    <repository>
+### 1. **Add the Repository:**
+
+Add the following `<repositories>` section to your microservice's `pom.xml` (if you don't have one, add it under the main `<project>` element; if you do, add this `<repository>` entry inside the existing `<repositories>` section):
+
+```xml
+<repositories>
+  <repository>
     <id>jitpack.io</id>
     <url>https://jitpack.io</url>
-	<snapshots>
-        <enabled>true</enabled>
-        <updatePolicy>always</updatePolicy>
-    </snapshots>
-	</repository>
-    </repositories>
+  </repository>
+</repositories>
+```
+---
 
-    ```
-    * **Note:** If the `mq-utils-lib` repository is **public**, this is all you need for the repository configuration.
-    * **If the `mq-utils-lib` repository is private**, ensure your Maven `settings.xml` (usually `~/.m2/settings.xml`) has a `<server>` entry with the `<id>` `github-podzilla` and your GitHub credentials (username and PAT).
+### 2. **Add the Dependency:**
 
-2.  **Add the Dependency:**
-    Add the following `<dependency>` block within the `<dependencies>` section of your microservice's `pom.xml`:
-   
+Inside your `<dependencies>` section, add:
 
-    example :
-    ```xml
-    <dependencies>
-        ...
+```xml
+<dependency>
+  <groupId>com.github.Podzilla</groupId>
+  <artifactId>mq-utils-lib</artifactId>
+  <version>v1.1.0</version>
+</dependency>
+```
+---
 
-       <dependency>
-			<groupId>com.github.Podzilla</groupId>
-			<artifactId>mq-utils-lib</artifactId>
-			<version>main-SNAPSHOT</version>
-		</dependency>
+### 3. **Build Your Project:**
 
-        ...
-    </dependencies>
-    ```
-    * Use the specific release version (e.g., `1.0.0`) or SNAPSHOT version (e.g., `1.0.1-SNAPSHOT`) you want to use.
+Once added, build your project using:
 
-3.  **Build Your Project:**
-    After adding these sections, run a standard Maven command like `mvn clean install` or `mvn package` in your microservice's directory. Maven will download the `mq-utils-lib` JAR from GitHub Packages.
+```bash
+mvn clean install -U
+```
 
+> 🧠 The `-U` flag forces Maven to **update all snapshots/releases**, ensuring it downloads the latest version from JitPack.
+
+---
 
 ## Release Workflow for `mq-utils-lib`
 
+### Branches
 
-## Branches
+* **`dev`**: Ongoing development. Unstable.
+* **`main`**: Stable release branch. Only merges for version releases.
 
-* **`dev`**: Ongoing development branch. Changes merge here first. **Not stable.**
-* **`main`**: Stable, released versions branch. Merges here only for releases. Commits match release versions.
+---
 
-## Release Workflow (For Admins / Release Managers)
+### Release Workflow (For Admins / Release Managers)
 
-Follow these steps to publish a new release:
+1. **Ensure `dev` is Ready:**
 
-1.  **Ensure `dev` Ready:** Verify all release features/fixes are in `dev`. Latest CI on `dev` must pass.
+   * All features/fixes completed.
+   * CI passes on `dev`.
 
-2.  **Pull Latest:** Sync local `dev` and `main`.
-    ```bash
-    git checkout dev
-    git pull origin dev
-    git checkout main
-    git pull origin main
-    ```
+2. **Pull Latest Branches:**
 
-3.  **Merge `dev` into `main`:** Merge `dev` history into `main`.
-    ```bash
-    git merge dev
-    ```
-    *(Resolve conflicts if needed)*
+   ```bash
+   git checkout dev && git pull origin dev
+   git checkout main && git pull origin main
+   ```
 
-4.  **Verify `main` Build:** Build and test merged `main` locally.
-    ```bash
-    mvn clean verify
-    ```
-    Ensure success.
+3. **Merge `dev` into `main`:**
 
-5.  **Update Release Version:** Determine Semantic Version (X.Y.Z). Edit `pom.xml` on `main`: change `<version>` from SNAPSHOT to X.Y.Z.
+   ```bash
+   git merge dev
+   ```
 
-6.  **Commit Version Change:** Commit the `pom.xml` update on `main`.
-    ```bash
-    git add pom.xml
-    git commit -m "Release X.Y.Z"
-    ```
+4. **Verify `main` Build:**
 
-7.  **Tag Release Commit:** Create annotated Git tag `vX.Y.Z` on the version commit on `main`.
-    ```bash
-    git tag -a vX.Y.Z -m "Version X.Y.Z Release"
-    ```
+   ```bash
+   mvn clean verify
+   ```
 
-8.  **Push Commits and Tags:** Push `main` commits and the release tag to remote.
-    ```bash
-    git push origin main
-    git push origin --tags
-    ```
-    **❗❗❗❗ Pushing the tag to `main` triggers the automated GitHub Actions release.**
+5. **Update `pom.xml` Version:**
 
-9.  **Verify Automated Release:** Check GitHub "Actions" tab for triggered workflow run. Ensure success. Check "Packages" for published version.
+   * Change from `*-SNAPSHOT` to `X.Y.Z`.
+
+6. **Commit Version Change:**
+
+   ```bash
+   git add pom.xml
+   git commit -m "Release X.Y.Z"
+   ```
+
+7. **Tag the Release:**
+
+   ```bash
+   git tag -a vX.Y.Z -m "Version X.Y.Z Release"
+   ```
+
+8. **Push Commits and Tags:**
+
+   ```bash
+   git push origin main
+   git push origin --tags
+   ```
+
+   > ⚠️ Pushing the tag triggers GitHub Actions + JitPack release.
+
+9. **Verify on GitHub:**
+
+   * Check Actions tab for success.
+   * Visit: [https://jitpack.io/#Podzilla/mq-utils-lib](https://jitpack.io/#Podzilla/mq-utils-lib)
