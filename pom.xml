@@ -10,22 +10,15 @@
         <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <spring-boot.version>3.2.5</spring-boot.version> </properties>
+        <spring-boot.version>3.2.5</spring-boot.version>
+    </properties>
 
-    <groupId>com.podzilla</groupId>
+    <groupId>com.github.Podzilla</groupId>
     <artifactId>mq-utils-lib</artifactId>
-    <version>main-SNAPSHOT</version>
+    <version>1.0.2</version>
     <packaging>jar</packaging>
     <name>MQ Utils Library</name>
     <description>MQ Utils Library for Podzilla</description>
-
-    <distributionManagement>
-        <repository>
-            <id>podzilla-github</id>
-            <name>GitHub Packages</name>
-            <url>https://maven.pkg.github.com/Podzilla/mq-utils-lib</url>
-        </repository>
-    </distributionManagement>
 
     <dependencies>
         <dependency>
@@ -60,7 +53,7 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <version>${spring-boot.version}</version>
-                </plugin>
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
