@@ -29,8 +29,8 @@ Inside your `<dependencies>` section, add:
 ```xml
 <dependency>
   <groupId>com.github.Podzilla</groupId>
-  <artifactId>mq-utils-lib</artifactId>
-  <version>v1.1.2</version>
+  <artifactId>podzilla-utils-lib</artifactId>
+  <version>v1.1.3</version>
 </dependency>
 ```
 ---
