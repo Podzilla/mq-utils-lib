@@ -1,1 +1,1 @@
-com.podzilla.security.AllowedRolesAutoConfig
+com.podzilla.auth.config.AllowedRolesAutoConfig
