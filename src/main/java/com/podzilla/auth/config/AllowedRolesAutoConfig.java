@@ -17,7 +17,7 @@ public class AllowedRolesAutoConfig implements WebMvcConfigurer {
     }
 
     @Override
-    public void addInterceptors(InterceptorRegistry registry) {
+    public void addInterceptors(final InterceptorRegistry registry) {
         registry.addInterceptor(allowedRolesInterceptor());
     }
 }

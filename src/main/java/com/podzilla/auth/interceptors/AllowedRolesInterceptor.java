@@ -5,10 +5,11 @@ import com.podzilla.auth.annotations.AllowedRoles;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.NonNull;
-import org.springframework.messaging.handler.HandlerMethod;
+import org.springframework.web.method.HandlerMethod;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 
+import java.time.LocalDateTime;
 import java.util.Set;
 
 @Component
@@ -36,8 +37,16 @@ public class AllowedRolesInterceptor implements HandlerInterceptor {
 
         String header = request.getHeader("X-User-Roles");
         if (header == null) {
-            response.sendError(HttpServletResponse.SC_FORBIDDEN,
-                    "Missing roles header");
+            response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+            response.setContentType("application/json");
+            response.getWriter().write(
+                    "{"
+                            + "\"message\": \"Missing roles header\","
+                            + "\"status\": \"FORBIDDEN\","
+                            + "\"timestamp\": \"" + LocalDateTime.now() + "\""
+                            + "}"
+            );
+            response.getWriter().flush();
             return false;
         }
 
@@ -46,8 +55,16 @@ public class AllowedRolesInterceptor implements HandlerInterceptor {
 
         boolean hasAccess = userRoles.stream().anyMatch(allowedRoles::contains);
         if (!hasAccess) {
-            response.sendError(HttpServletResponse.SC_FORBIDDEN,
-                    "Access denied");
+            response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+            response.setContentType("application/json");
+            response.getWriter().write(
+                    "{"
+                            + "\"message\": \"Access denied\","
+                            + "\"status\": \"FORBIDDEN\","
+                            + "\"timestamp\": \"" + LocalDateTime.now() + "\""
+                            + "}"
+            );
+            response.getWriter().flush();
             return false;
         }
 
