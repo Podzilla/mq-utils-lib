@@ -1,8 +1,8 @@
-# mq-utils-lib
+# podzilla-utils-lib
 
-## Consuming the `mq-utils-lib` Package
+## Consuming the `podzilla-utils-lib` Package
 
-To use the shared `mq-utils-lib` in your microservice project, add it as a dependency in your project's `pom.xml`.
+To use the shared `podzilla-utils-lib` in your microservice project, add it as a dependency in your project's `pom.xml`.
 
 This library is hosted on JitPack, so you also need to add the JitPack repository URL to your `pom.xml`.
 
@@ -30,7 +30,7 @@ Inside your `<dependencies>` section, add:
 <dependency>
   <groupId>com.github.Podzilla</groupId>
   <artifactId>podzilla-utils-lib</artifactId>
-  <version>v1.1.3</version>
+  <version>v1.1.5</version>
 </dependency>
 ```
 ---
