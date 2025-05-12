@@ -20,4 +20,5 @@ public class CartCheckedoutEvent extends BaseEvent {
     private String customerId;
     private List<OrderItem> items;
     private BigDecimal totalAmount;
+    private DeliveryAddress deliveryAddress;
 }

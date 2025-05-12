@@ -20,4 +20,5 @@ public class OrderPlacedEvent extends BaseEvent {
     private String customerId;
     private BigDecimal totalAmount;
     private List<OrderItem> items;
+    private DeliveryAddress deliveryAddress;
 }

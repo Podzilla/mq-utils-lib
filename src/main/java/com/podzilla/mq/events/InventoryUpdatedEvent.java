@@ -14,5 +14,5 @@ import lombok.experimental.SuperBuilder;
 public class InventoryUpdatedEvent extends BaseEvent {
 
     private String productId;
-    private Integer quantity;
+    private Integer newQuantity;
 }

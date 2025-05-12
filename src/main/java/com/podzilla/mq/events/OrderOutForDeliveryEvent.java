@@ -11,9 +11,8 @@ import lombok.experimental.SuperBuilder;
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 @SuperBuilder
-public class OrderFailedEvent extends BaseEvent {
+public class OrderOutForDeliveryEvent extends BaseEvent {
 
     private String orderId;
     private String courierId;
-    private String reason;
 }

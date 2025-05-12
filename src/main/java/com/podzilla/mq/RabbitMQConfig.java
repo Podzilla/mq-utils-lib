@@ -27,174 +27,219 @@ public class RabbitMQConfig {
         return new TopicExchange("order_exchange", true, false);
     }
 
+    // Analytics Queues
     @Bean
     public Queue analyticsUserEventQueue() {
-        return new Queue("analytics_user_event_queue", true, false, false);
+        return new Queue(EventsConstants.ANALYTICS_USER_EVENT_QUEUE, true, false, false);
     }
 
     @Bean
     public Queue analyticsOrderEventQueue() {
-        return new Queue("analytics_order_event_queue", true, false, false);
+        return new Queue(EventsConstants.ANALYTICS_ORDER_EVENT_QUEUE, true, false, false);
     }
 
     @Bean
     public Queue analyticsInventoryEventQueue() {
-        return new Queue("analytics_inventory_event_queue", true, false, false);
+        return new Queue(EventsConstants.ANALYTICS_INVENTORY_EVENT_QUEUE, true, false, false);
     }
 
+    // Order Queues
     @Bean
     public Queue orderOrderEventQueue() {
-        return new Queue("order_order_event_queue", true, false, false);
+        return new Queue(EventsConstants.ORDER_ORDER_EVENT_QUEUE, true, false, false);
     }
 
     @Bean
+    public Queue orderInventoryEventQueue() {
+        return new Queue(EventsConstants.ORDER_INVENTORY_EVENT_QUEUE, true, false, false);
+    }
+
+    // Warehouse Queues
+    @Bean
     public Queue warehouseOrderEventQueue() {
-        return new Queue("warehouse_order_event_queue", true, false, false);
+        return new Queue(EventsConstants.WAREHOUSE_ORDER_EVENT_QUEUE, true, false, false);
+    }
+
+    @Bean
+    public Queue warehouseInventoryEventQueue() {
+        return new Queue(EventsConstants.WAREHOUSE_INVENTORY_EVENT_QUEUE, true, false, false);
+    }
+
+    // Courier Queues
+    @Bean
+    public Queue courierUserEventQueue() {
+        return new Queue(EventsConstants.COURIER_USER_EVENT_QUEUE, true, false, false);
     }
 
     @Bean
     public Queue courierOrderEventQueue() {
-        return new Queue("courier_order_event_queue", true, false, false);
+        return new Queue(EventsConstants.COURIER_ORDER_EVENT_QUEUE, true, false, false);
     }
 
+    // Bindings for User Events
     @Bean
     public Binding bindCourierRegisteredToAnalyticsUser() {
         return BindingBuilder.bind(analyticsUserEventQueue())
                 .to(userExchange())
-                .with("courier.registered");
+                .with(EventsConstants.COURIER_REGISTERED.getRoutingKey());
     }
 
     @Bean
     public Binding bindCustomerRegisteredToAnalyticsUser() {
         return BindingBuilder.bind(analyticsUserEventQueue())
                 .to(userExchange())
-                .with("customer.registered");
+                .with(EventsConstants.CUSTOMER_REGISTERED.getRoutingKey());
     }
 
+    @Bean
+    public Binding bindCourierRegisteredToCourierUser() {
+        return BindingBuilder.bind(courierUserEventQueue())
+                .to(userExchange())
+                .with(EventsConstants.COURIER_REGISTERED.getRoutingKey());
+    }
+
+    // Bindings for Inventory Events
+    
+    // Bindings for Inventory Events to Analytics Queue
     @Bean
     public Binding bindProductCreatedToAnalyticsInventory() {
         return BindingBuilder.bind(analyticsInventoryEventQueue())
                 .to(inventoryExchange())
-                .with("product.created");
+                .with(EventsConstants.PRODUCT_CREATED.getRoutingKey());
     }
 
     @Bean
     public Binding bindInventoryUpdatedToAnalyticsInventory() {
         return BindingBuilder.bind(analyticsInventoryEventQueue())
                 .to(inventoryExchange())
-                .with("inventory.updated");
+                .with(EventsConstants.INVENTORY_UPDATED.getRoutingKey());
+    }
+
+    // Bindings for Inventory Events to Warehouse Queue
+    @Bean
+    public Binding bindOrderStockReservationRequestedToWarehouseInventory() {
+        return BindingBuilder.bind(warehouseInventoryEventQueue())
+                .to(inventoryExchange())
+                .with(EventsConstants.ORDER_STOCK_RESERVATION_REQUESTED.getRoutingKey());
+    }
+
+    // Bindings for Inventory Events to Order Queue
+    @Bean
+    public Binding bindWarehouseStockReservedToOrderInventory() {
+        return BindingBuilder.bind(orderInventoryEventQueue())
+                .to(inventoryExchange())
+                .with(EventsConstants.WAREHOUSE_STOCK_RESERVED.getRoutingKey());
     }
 
     @Bean
-    public Binding bindAnalyticsOrderEvents() {
+    public Binding bindWarehouseOrderFulfillmentFailedToOrderInventory() {
+        return BindingBuilder.bind(orderInventoryEventQueue())
+                .to(inventoryExchange())
+                .with(EventsConstants.WAREHOUSE_ORDER_FULFILLMENT_FAILED.getRoutingKey());
+    }
+
+    // Bindings for Order Events
+
+    // Bindings for Order Events to Analytics Queue
+    @Bean
+    public Binding bindOrderEventsToAnalyticsExcludingPackaged() {
         return BindingBuilder.bind(analyticsOrderEventQueue())
                 .to(orderExchange())
-                .with("cart.checkedout");
+                .with(EventsConstants.ORDER_PLACED.getRoutingKey());
     }
 
     @Bean
-    public Binding bindAllOrderEventsToAnalytics() {
+    public Binding bindOrderCancelledToAnalyticsOrder() {
         return BindingBuilder.bind(analyticsOrderEventQueue())
                 .to(orderExchange())
-                .with("order.*");
+                .with(EventsConstants.ORDER_CANCELLED.getRoutingKey());
     }
 
+    @Bean
+    public Binding bindOrderAssignedToCourierToAnalyticsOrder() {
+        return BindingBuilder.bind(analyticsOrderEventQueue())
+                .to(orderExchange())
+                .with(EventsConstants.ORDER_ASSIGNED_TO_COURIER.getRoutingKey());
+    }
+
+    @Bean
+    public Binding bindOrderOutForDeliveryToAnalyticsOrder() {
+        return BindingBuilder.bind(analyticsOrderEventQueue())
+                .to(orderExchange())
+                .with(EventsConstants.ORDER_OUT_FOR_DELIVERY.getRoutingKey());
+    }
+
+    @Bean
+    public Binding bindOrderDeliveredToAnalyticsOrder() {
+        return BindingBuilder.bind(analyticsOrderEventQueue())
+                .to(orderExchange())
+                .with(EventsConstants.ORDER_DELIVERED.getRoutingKey());
+    }
+
+    @Bean
+    public Binding bindOrderDeliveryFailedToAnalyticsOrder() {
+        return BindingBuilder.bind(analyticsOrderEventQueue())
+                .to(orderExchange())
+                .with(EventsConstants.ORDER_DELIVERY_FAILED.getRoutingKey());
+    }
+
+    // Bindings for Order Events to Order Queue
     @Bean
     public Binding bindCartCheckedoutToOrderOrder() {
         return BindingBuilder.bind(orderOrderEventQueue())
                 .to(orderExchange())
-                .with("cart.checkedout");
+                .with(EventsConstants.CART_CHECKEDOUT.getRoutingKey());
     }
 
     @Bean
     public Binding bindOrderPackagedToOrderOrder() {
         return BindingBuilder.bind(orderOrderEventQueue())
                 .to(orderExchange())
-                .with("order.packaged");
+                .with(EventsConstants.ORDER_PACKAGED.getRoutingKey());
     }
 
     @Bean
     public Binding bindOrderAssignedToCourierToOrderOrder() {
         return BindingBuilder.bind(orderOrderEventQueue())
                 .to(orderExchange())
-                .with("order.assigned_to_courier");
+                .with(EventsConstants.ORDER_ASSIGNED_TO_COURIER.getRoutingKey());
     }
 
     @Bean
-    public Binding bindOrderShippedToOrderOrder() {
+    public Binding bindOrderOutForDeliveryToOrderOrder() {
         return BindingBuilder.bind(orderOrderEventQueue())
                 .to(orderExchange())
-                .with("order.shipped");
+                .with(EventsConstants.ORDER_OUT_FOR_DELIVERY.getRoutingKey());
     }
 
     @Bean
     public Binding bindOrderDeliveredToOrderOrder() {
         return BindingBuilder.bind(orderOrderEventQueue())
                 .to(orderExchange())
-                .with("order.delivered");
+                .with(EventsConstants.ORDER_DELIVERED.getRoutingKey());
     }
 
-    @Bean
-    public Binding bindOrderFailedToOrderOrder() {
-        return BindingBuilder.bind(orderOrderEventQueue())
-                .to(orderExchange())
-                .with("order.failed");
-    }
-
+    // Bindings for Order Events to Warehouse Queue
     @Bean
     public Binding bindOrderPlacedToWarehouseOrder() {
         return BindingBuilder.bind(warehouseOrderEventQueue())
                 .to(orderExchange())
-                .with("order.placed");
+                .with(EventsConstants.ORDER_PLACED.getRoutingKey());
     }
 
     @Bean
-    public Binding bindOrderCancelledToWarehouseOrder() {
+    public Binding bindOrderDeliveryFailedToWarehouseOrder() {
         return BindingBuilder.bind(warehouseOrderEventQueue())
                 .to(orderExchange())
-                .with("order.cancelled");
+                .with(EventsConstants.ORDER_DELIVERY_FAILED.getRoutingKey());
     }
 
-    @Bean
-    public Binding bindOrderAssignedToCourierToWarehouseOrder() {
-        return BindingBuilder.bind(warehouseOrderEventQueue())
-                .to(orderExchange())
-                .with("order.assigned_to_courier");
-    }
-
-    @Bean
-    public Binding bindOrderPackagedToCourierOrder() {
-        return BindingBuilder.bind(courierOrderEventQueue())
-                .to(orderExchange())
-                .with("order.packaged");
-    }
-
+    // Bindings for Order Events to Courier Queue
     @Bean
     public Binding bindOrderAssignedToCourierToCourierOrder() {
         return BindingBuilder.bind(courierOrderEventQueue())
                 .to(orderExchange())
-                .with("order.assigned_to_courier");
-    }
-
-    @Bean
-    public Binding bindOrderShippedToCourierOrder() {
-        return BindingBuilder.bind(courierOrderEventQueue())
-                .to(orderExchange())
-                .with("order.shipped");
-    }
-
-    @Bean
-    public Binding bindOrderDeliveredToCourierOrder() {
-        return BindingBuilder.bind(courierOrderEventQueue())
-                .to(orderExchange())
-                .with("order.delivered");
-    }
-
-    @Bean
-    public Binding bindOrderFailedToCourierOrder() {
-        return BindingBuilder.bind(courierOrderEventQueue())
-                .to(orderExchange())
-                .with("order.failed");
+                .with(EventsConstants.ORDER_ASSIGNED_TO_COURIER.getRoutingKey());
     }
 
     @Bean

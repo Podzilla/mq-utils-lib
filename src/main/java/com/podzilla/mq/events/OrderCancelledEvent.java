@@ -14,5 +14,6 @@ import lombok.experimental.SuperBuilder;
 public class OrderCancelledEvent extends BaseEvent {
 
     private String orderId;
+    private String customerId;
     private String reason;
 }
