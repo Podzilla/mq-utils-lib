@@ -14,10 +14,10 @@ Add the following `<repositories>` section to your microservice's `pom.xml` (und
 
 ```xml
 <repositories>
-  <repository>
-    <id>jitpack.io</id>
-    <url>[https://jitpack.io](https://jitpack.io)</url>
-  </repository>
+  <repository>
+    <id>jitpack.io</id>
+    <url>https://jitpack.io</url>
+  </repository>
 </repositories>
 ```
 ---
@@ -28,9 +28,9 @@ Inside your `<dependencies>` section, add:
 
 ```xml
 <dependency>
-  <groupId>com.github.Podzilla</groupId>
-  <artifactId>podzilla-utils-lib</artifactId>
-  <version>v1.1.5</version>
+  <groupId>com.github.Podzilla</groupId>
+  <artifactId>podzilla-utils-lib</artifactId>
+  <version>v1.1.6</version>
 </dependency>
 ```
 ---
@@ -68,24 +68,21 @@ spring.rabbitmq.password=guest
 
 ### 5. **Spring Component Scanning**
 
-To ensure library components are discovered, your main Spring Boot application class (with `@SpringBootApplication`) might need `@ComponentScan`.
-
-If your service's base package is different from the library's `com.podzilla` (e.g., `com.Podzilla` or `com.yourcompany.myservice`), include both:
+To ensure Spring discovers the library components, include `com.podzilla` in `@ComponentScan`. If your service uses a different base package, include that as well:
 
 ```java
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication
-@ComponentScan(basePackages = { "com.podzilla", "com.Podzilla" /* Add your service's base package here if different */ })
-public class AnalyticsApplication { // Replace with your actual application class name
+@ComponentScan(basePackages = { "com.podzilla", "com.yourcompany.myservice" }) // Add your service package if different
+public class MyApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(AnalyticsApplication.class, args);
+        SpringApplication.run(MyApplication.class, args);
     }
 }
 ```
+
+Replace `"com.yourcompany.myservice"` with your actual service package if it's different from `com.podzilla`.
 
 ---
 
@@ -96,13 +93,6 @@ Publish events using the `EventPublisher` component from the library.
 **Injecting the Publisher:**
 
 ```java
-import com.Podzilla.mq.EventPublisher; // Adjust package if needed
-import com.Podzilla.mq.EventsConstants; // Adjust package if needed
-import com.Podzilla.mq.payloads.CourierRegisteredEvent; // Adjust package if needed
-
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-
 @Service
 @RequiredArgsConstructor
 public class MyService {
@@ -113,32 +103,18 @@ public class MyService {
 ```
 
 **Event Metadata & Payload:**
-Use `EventMetadata` constants from `EventsConstants` (e.g., `COURIER_REGISTERED`). Event payloads are classes implementing `EventPayload` (e.g., `CourierRegisteredEvent`).
+Use `EventMetadata` constants from `EventsConstants` (e.g., `COURIER_REGISTERED`). Event payloads are classes extending `BaseEvent` (e.g., `CourierRegisteredEvent`).
 
-Available `EventMetadata` constants:
-* `COURIER_REGISTERED`
-* `CUSTOMER_REGISTERED`
-* `PRODUCT_CREATED`
-* `INVENTORY_UPDATED`
-* `CART_CHECKED_OUT`
-* `ORDER_PLACED`
-* `ORDER_CANCELLED`
-* `ORDER_PACKAGED`
-* `ORDER_ASSIGNED_TO_COURIER`
-* `ORDER_SHIPPED`
-* `ORDER_DELIVERED`
-* `ORDER_FAILED`
+#### Example Pairs:
+
+* `EventsConstants.COURIER_REGISTERED` → `CourierRegisteredEvent`
+* `EventsConstants.ORDER_PLACED` → `OrderPlacedEvent`
+* `EventsConstants.INVENTORY_UPDATED` → `InventoryUpdatedEvent`
+* `EventsConstants.ORDER_DELIVERED` → `OrderDeliveredEvent`
 
 **Example of Publishing:**
 
 ```java
-import com.Podzilla.mq.EventPublisher;
-import com.Podzilla.mq.EventsConstants;
-import com.Podzilla.mq.payloads.CourierRegisteredEvent;
-
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-
 @Service
 @RequiredArgsConstructor
 public class MyService {
@@ -154,80 +130,86 @@ public class MyService {
 
 ### 7. **Consuming Events**
 
-In consuming services, after previous configurations, use the `@RabbitListener` annotation.
+Each service can define up to **three queues**—one for each exchange: `user`, `order`, and `inventory`. These queues receive different event types, but **all events extend `BaseEvent`** from the shared library.
 
-**Queue Constants:**
-Queue constants are available in `EventsConstants`. They follow the format `SERVICE_EXCHANGE_QUEUE`.
+When consuming, use the `@RabbitListener` annotation. You can inspect the specific event type using `instanceof` or reflection.
 
-Available queue constants:
+**Queue Constants**
+Queue names are defined in `EventsConstants` using the format:
+`<SERVICE>_<EXCHANGE>_EVENT_QUEUE`
+
+Examples:
+
 * `ANALYTICS_USER_EVENT_QUEUE`
-* `ANALYTICS_ORDER_EVENT_QUEUE`
-* `ANALYTICS_INVENTORY_EVENT_QUEUE`
 * `ORDER_ORDER_EVENT_QUEUE`
-* `WAREHOUSE_ORDER_EVENT_QUEUE`
-* `COURIER_ORDER_EVENT_QUEUE`
+* `WAREHOUSE_INVENTORY_EVENT_QUEUE`
+* `COURIER_USER_EVENT_QUEUE`
 
-**Example of Consuming:**
+**Example Listener:**
 
 ```java
-import com.Podzilla.mq.EventsConstants;
-import com.Podzilla.mq.events.CourierRegisteredEvent; // Adjust package if needed
-
-import org.springframework.amqp.rabbit.annotation.RabbitListener;
-import org.springframework.stereotype.Component;
-
 @Component
 public class AnalyticsUserEventsConsumer {
 
     @RabbitListener(queues = EventsConstants.ANALYTICS_USER_EVENT_QUEUE)
-    public void handleCourierRegistered(CourierRegisteredEvent payload) {
-        System.out.println("Received Courier Registered Event: " + payload);
-        // Implement your business logic here
+    public void handleEvent(BaseEvent event) {
+        if (event instanceof CourierRegisteredEvent) {
+            CourierRegisteredEvent courierEvent = (CourierRegisteredEvent) event;
+            System.out.println("Received Courier Registered Event: " + courierEvent);
+            // Add your business logic here
+        }
     }
 }
 ```
 
 ---
 
-## Release Workflow for `mq-utils-lib`
+### 🔧 8. **QueueResolver (For Development Use Only)**
 
-### Branches
+The `QueueResolver` utility helps during **local development** by determining which queue a service should listen to for a given event.
 
-* **`dev`**: Ongoing development. Unstable.
-* **`main`**: Stable release branch. Only merges for version releases.
+> ⚠️ **Note:** This utility is **not used at runtime in production**. It is designed for test scaffolding, dev tooling, or simulating behavior in local environments.
+
+**Usage:**
+
+```java
+String queue = QueueResolver.getQueueForServiceEvent(
+    EventsConstants.SERVICE_ANALYTICS,
+    EventsConstants.ORDER_PLACED
+);
+System.out.println("Queue to listen on: " + queue);
+// Output: "ANALYTICS_ORDER_EVENT_QUEUE"
+```
+
+**Signature:**
+
+```java
+public static String getQueueForServiceEvent(String serviceName, EventsConstants.EventMetadata eventMetadata)
+```
+
+* `serviceName`: e.g., `EventsConstants.SERVICE_ANALYTICS`
+* `eventMetadata`: e.g., `EventsConstants.ORDER_PLACED`
+* Returns the appropriate queue name string, or `null` if no match is found.
 
 ---
 
-### Release Workflow (For Admins / Release Managers)
+## Release Notes for `podzilla-utils-lib`
 
-1.  **Ensure `dev` is Ready:** All features/fixes completed; CI passes on `dev`.
-2.  **Pull Latest Branches:**
-    ```bash
-    git checkout dev && git pull origin dev
-    git checkout main && git pull origin main
-    ```
-3.  **Merge `dev` into `main`:**
-    ```bash
-    git merge dev
-    ```
-4.  **Verify `main` Build:**
-    ```bash
-    mvn clean verify
-    ```
-5.  **Update `pom.xml` Version:** Change from `*-SNAPSHOT` to `X.Y.Z`.
-6.  **Commit Version Change:**
-    ```bash
-    git add pom.xml
-    git commit -m "Release X.Y.Z"
-    ```
-7.  **Tag the Release:**
-    ```bash
-    git tag -a vX.Y.Z -m "Version X.Y.Z Release"
-    ```
-8.  **Push Commits and Tags:**
-    ```bash
-    git push origin main
-    git push origin --tags
-    ```
-    > ⚠️ Pushing the tag triggers GitHub Actions + JitPack release.
-9.  **Verify on GitHub:** Check Actions tab for success; Visit: [https://jitpack.io/#Podzilla/mq-utils-lib](https://jitpack.io/#Podzilla/mq-utils-lib)
+* The stable code lives in the `main` branch.
+* When ready to release a new version:
+
+  1. Update the version in `pom.xml` (remove `-SNAPSHOT`, set new version).
+  2. Commit the version change.
+  3. Create a Git tag with the version number, e.g.:
+
+     ```bash
+     git tag -a vX.Y.Z -m "Release version X.Y.Z"
+     ```
+  4. Push the changes and the tags:
+
+     ```bash
+     git push origin main
+     git push origin --tags
+     ```
+* **Note:** Pushing the tag automatically triggers the build and deployment on JitPack.
+* Check the build status on GitHub Actions and your release on [JitPack](https://jitpack.io/#Podzilla/podzilla-utils-lib).
