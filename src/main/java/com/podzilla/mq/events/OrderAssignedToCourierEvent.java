@@ -3,6 +3,9 @@ package com.podzilla.mq.events;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+
+import java.math.BigDecimal;
+
 import lombok.AllArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
@@ -15,4 +18,7 @@ public class OrderAssignedToCourierEvent extends BaseEvent {
 
     private String orderId;
     private String courierId;
+    private BigDecimal price;
+    private double orderLatitude;
+    private double orderLongitude;
 }
