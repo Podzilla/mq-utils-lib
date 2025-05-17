@@ -18,7 +18,17 @@ public class OrderPlacedEvent extends BaseEvent {
 
     private String orderId;
     private String customerId;
-    private BigDecimal totalAmount;
     private List<OrderItem> items;
     private DeliveryAddress deliveryAddress;
+    private BigDecimal totalAmount;
+    private double orderLatitude;
+    private double orderLongitude;
+    private String signature;
+    private ConfirmationType confirmationType;
+
+    public enum ConfirmationType {
+        OTP,
+        QR_CODE,
+        SIGNATURE
+    }
 }

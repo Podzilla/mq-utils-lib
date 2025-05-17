@@ -18,7 +18,15 @@ public class OrderAssignedToCourierEvent extends BaseEvent {
 
     private String orderId;
     private String courierId;
-    private BigDecimal price;
+    private BigDecimal totalAmount;
     private double orderLatitude;
     private double orderLongitude;
+    private String signature;
+    private ConfirmationType confirmationType;
+
+    public enum ConfirmationType {
+        OTP,
+        QR_CODE,
+        SIGNATURE
+    }
 }
