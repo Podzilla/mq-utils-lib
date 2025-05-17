@@ -25,10 +25,4 @@ public class OrderPlacedEvent extends BaseEvent {
     private double orderLongitude;
     private String signature;
     private ConfirmationType confirmationType;
-
-    public enum ConfirmationType {
-        OTP,
-        QR_CODE,
-        SIGNATURE
-    }
 }
