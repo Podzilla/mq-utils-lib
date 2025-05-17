@@ -21,6 +21,8 @@ public class CartCheckedoutEvent extends BaseEvent {
     private List<OrderItem> items;
     private BigDecimal totalAmount;
     private DeliveryAddress deliveryAddress;
+    private double orderLatitude;
+    private double orderLongitude;
     private String signature;
     private ConfirmationType confirmationType;
 }
