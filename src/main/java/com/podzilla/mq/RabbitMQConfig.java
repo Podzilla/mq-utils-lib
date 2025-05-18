@@ -99,7 +99,7 @@ public class RabbitMQConfig {
     }
 
     // Bindings for Inventory Events
-    
+
     // Bindings for Inventory Events to Analytics Queue
     @Bean
     public Binding bindProductCreatedToAnalyticsInventory() {
@@ -113,6 +113,14 @@ public class RabbitMQConfig {
         return BindingBuilder.bind(analyticsInventoryEventQueue())
                 .to(inventoryExchange())
                 .with(EventsConstants.INVENTORY_UPDATED.getRoutingKey());
+    }
+
+    @Bean
+    public Binding bindWarehouseOrderFulfillmentFailedToAnalyticsInventory() {
+        return BindingBuilder.bind(
+                analyticsInventoryEventQueue())
+                .to(inventoryExchange())
+                .with(EventsConstants.WAREHOUSE_ORDER_FULFILLMENT_FAILED.getRoutingKey());
     }
 
     // Bindings for Inventory Events to Warehouse Queue
@@ -219,12 +227,26 @@ public class RabbitMQConfig {
                 .with(EventsConstants.ORDER_DELIVERED.getRoutingKey());
     }
 
+    @Bean
+    public Binding bindOrderDeliveryFailedToOrderOrder() {
+        return BindingBuilder.bind(orderOrderEventQueue())
+                .to(orderExchange())
+                .with(EventsConstants.ORDER_DELIVERY_FAILED.getRoutingKey());
+    }
+
     // Bindings for Order Events to Warehouse Queue
     @Bean
     public Binding bindOrderPlacedToWarehouseOrder() {
         return BindingBuilder.bind(warehouseOrderEventQueue())
                 .to(orderExchange())
                 .with(EventsConstants.ORDER_PLACED.getRoutingKey());
+    }
+
+    @Bean
+    public Binding bindOrderCancelledToWarehouseOrder() {
+        return BindingBuilder.bind(warehouseOrderEventQueue())
+                .to(orderExchange())
+                .with(EventsConstants.ORDER_CANCELLED.getRoutingKey());
     }
 
     @Bean
