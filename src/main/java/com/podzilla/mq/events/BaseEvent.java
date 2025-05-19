@@ -14,6 +14,7 @@ public abstract class BaseEvent implements EventPayload {
     @Builder.Default
     private Instant timestamp = Instant.now();
 
+    
     public BaseEvent() {
         this.timestamp = Instant.now();
     }
